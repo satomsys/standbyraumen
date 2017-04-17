@@ -2,22 +2,38 @@
 * 位置情報
 */
 currentPos = null,
-posdata = {};
+posdata = null,
+myRequest = new XMLHttpRequest();
 
-function getLatLng(){
-	if ( navigator.geolocation ){
-		navigator.geolocation.getCurrentPosition( function( position ){
-		var lat = position.coords.latitude,
-			lng = position.coords.longitude;
 
-			return currentPos = {
-				lat : lat,
-				lng : lng
-			};			
-		}, function( err ){
-			console.warn( err );
-		});
-	} else {
-		currentPos = '位置情報を有効にしてください。';
+myRequest.addEventListener( 'progress', function( ev ){
+ // posdata = getLatLng();
+
+ // document.body.innerHTML = myRequest.responce;
+});
+myRequest.addEventListener( 'load', function( ev ){
+ document.body.innerHTML = myRequest.responce;
+});
+myRequest.open( 'GET', '../index.php');
+// myRequest.open( 'POST', '../index.php');
+
+myRequest.send( );
+
+
+
+/**
+* 位置情報を返す
+*/
+function showPosition(position) {
+	console.log( position.coords.latitude + ", " + position.coords.longitude );
+)
+}
+function handleError(error) {
+	document.getElementById("location").innerHTML = error.message;
+}
+function getPosition() {
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(showPosition, handleError);
 	}
 }
+window.addEventListener("load", getPosition, false);
