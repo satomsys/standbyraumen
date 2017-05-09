@@ -8,7 +8,7 @@
 // var_dump( PATHINFO_FILENAME );
 // (empty($_SERVER["HTTPS"]) ? "http://" : "https://")
 
-include 'function/fortest.php';
+// include 'function/fortest.php';
 
 	// 設定項目
 	$access_token = '20917341.6fe37bd.53d5a385dd71465e8ef198164bb4195f';
@@ -45,7 +45,6 @@ include 'function/fortest.php';
 	// JSONデータをオブジェクト形式に変換する
 	$obj = json_decode( $json ) ;
 
-	var_dump( $obj );
 
 	//位置情報の配列を作成
 	if( !$obj || !isset($obj->data) ){
@@ -57,10 +56,13 @@ include 'function/fortest.php';
 		foreach( $obj->data as $item ){
 			if( $item->location && $item->location->latitude && $item->location->longitude ){
 
-				$locationArg[$count] = [
+				$locationArg[$count] = array(
+					'img' => '<img src="' . $item->images->thumbnail->url . '">',
+					'imgUrl' =>  $item->images->thumbnail->url,
+					'text' => $item->caption->text,
 					'lat' => $item->location->latitude,
 					'lng' => $item->location->longitude
-				]; 
+				); 
 
 				$count++;
 			}
@@ -75,19 +77,23 @@ include 'function/fortest.php';
 
 		<!-- ビューポートの設定 -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA68RPDswpO5wwA_SRv0D-OUDkABO1n3BU&callback=initMap"></script>
-		<script src="js/mapSetter.js"></script>
-		<script src="js/getLocation.js"></script>
 
 		<title> stand by raumen beta</title>
 	</head>
 <body>
 
 
-<div id="map"></div>
-<?php echo $html ?>
+<div style="width: 300px; height: 300px;" id="map"></div>
+<?php 
+	// echo $html;
+
+	var_dump( $locationArg );
+?>
 
 
 
+	<script id="gMapInit" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA68RPDswpO5wwA_SRv0D-OUDkABO1n3BU&callback=initMap&libraries=places" data-locationArg='<?php echo json_encode( $locationArg ); ?>'></script>
+	<script src="js/getLocation.js"></script>
+	<script src="js/mapSetter.js"></script>
 </body>
 </html>

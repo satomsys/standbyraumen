@@ -3,6 +3,7 @@
 */
 currentPos = null,
 posdata = null,
+$latlng = new Array();
 myRequest = new XMLHttpRequest();
 
 
@@ -25,8 +26,14 @@ myRequest.send( );
 * 位置情報を返す
 */
 function showPosition(position) {
-	console.log( position.coords.latitude + ", " + position.coords.longitude );
-)
+
+	if( sessionStorage.length ){
+		sessionStorage.clear;
+	}
+
+	sessionStorage.setItem( 'yourLat', position.coords.latitude );
+	sessionStorage.setItem( 'yourLng', position.coords.longitude );
+	// console.log( position.coords.latitude + ", " + position.coords.longitude );
 }
 function handleError(error) {
 	document.getElementById("location").innerHTML = error.message;
